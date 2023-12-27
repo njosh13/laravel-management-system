@@ -12,7 +12,7 @@ class Book extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'name', 'publisher', 'isbn', 'sub_category', 'description', 'pages', 'category', 'added_by'
+        'name', 'publisher', 'isbn', 'sub_category', 'description', 'pages', 'category_id', 'added_by'
     ];
 
     public function category()

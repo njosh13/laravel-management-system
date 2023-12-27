@@ -4,11 +4,11 @@
             <AppBreadCumb :pages="breadCrumbPages" />
         </template>
 
-        <template #header> {{ user.name }} </template>
+        <template #header> {{ book.name }} </template>
 
         <template #addbutton>
-            <EditButtonShow v-if="selectedIndex == 0" :href="route('admin.users.edit', { user })">
-                Edit User
+            <EditButtonShow v-if="selectedIndex == 0" :href="route('admin.books.edit', { book })">
+                Edit Book
             </EditButtonShow>
         </template>
 
@@ -45,7 +45,7 @@
                 </TabList>
                 <!-- TabPanels -->
                 <TabPanels class="pt-4">
-                    <TabPanel :as="UserDetailsTabPanel" :user="user" />
+                    <TabPanel :as="BookDetailsTabPanel" :book="book" />
                 </TabPanels>
             </TabGroup>
         </div>
@@ -57,16 +57,16 @@ import { ref } from "vue";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import AppSelect from "@/components/AppSelect.vue";
-import UserDetailsTabPanel from "@/components/UserDetailsTabPanel.vue";
+import BookDetailsTabPanel from "../../components/BookDetailsTabPanel.vue";
 import AppBreadCumb from "@/components/AppBreadCumb.vue";
 import EditButtonShow from "@/components/EditButtonShow.vue";
 
 const props = defineProps({
-    user: Object,
+    book: Object,
 });
 const tabs = [
     {
-        name: "User details",
+        name: "Book details",
         id: 0,
     },
 ];
@@ -80,14 +80,14 @@ const setSelectedIndex = (index) => {
 
 const breadCrumbPages = [
     {
-        name: "user",
-        href: route("admin.users.index"),
+        name: "book",
+        href: route("admin.books.index"),
         current: false,
     },
 
     {
-        name: props.user.name,
-        href: route("admin.users.show", props.user.id),
+        name: props.book.name,
+        href: route("admin.books.show", props.book.id),
         current: true,
     },
 ];

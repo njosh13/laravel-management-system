@@ -5,7 +5,7 @@
         </template>
 
         <template #header>
-            {{ editMode ? "Edit User" : "Create User" }}
+            {{ editMode ? "Edit Book" : "Create Book" }}
         </template>
 
         <PageContent>
@@ -33,40 +33,103 @@
 
                                     <div class="sm:col-span-3">
                                         <label for="email" class="block text-sm font-medium text-gray-700">
-                                            Email
+                                            Publisher
                                         </label>
                                         <div class="mt-1">
                                             <FormInput
-                                                type="email"
-                                                v-model="form.email"
-                                                name="email"
-                                                id="email"
-                                                autocomplete="given-email"
+                                                type="text"
+                                                v-model="form.publisher"
+                                                name="publisher"
+                                                id="publisher"
+                                                autocomplete="given-publisher"
                                                 class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
                                         </div>
                                         <ValidationError>
-                                            {{ form.errors.email }}
+                                            {{ form.errors.publisher }}
                                         </ValidationError>
                                     </div>
 
                                     <div class="sm:col-span-3">
-                                        <label for="roles" class="block text-sm font-medium text-gray-700">
-                                            Roles
+                                        <label for="isbn" class="block text-sm font-medium text-gray-700"> Isbn </label>
+                                        <div class="mt-1">
+                                            <FormInput
+                                                type="text"
+                                                v-model="form.isbn"
+                                                name="isbn"
+                                                id="isbn"
+                                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                        </div>
+                                        <ValidationError>
+                                            {{ form.errors.isbn }}
+                                        </ValidationError>
+                                    </div>
+
+                                    <div class="sm:col-span-3">
+                                        <label for="categories" class="block text-sm font-medium text-gray-700">
+                                            Category
                                         </label>
                                         <div class="mt-1">
-                                            <Multiselect
-                                                id="roles"
-                                                v-model="form.roles"
-                                                :options="roles"
-                                                :searchable="true"
-                                                label="name"
-                                                mode="tags"
-                                                trackBy="name"
-                                                valueProp="id"
-                                                placeholder="Select roles" />
+                                            <FormSelect v-model="form.category_id" id="categories" name="categories">
+                                                <option value="">---Select Category---</option>
+                                                <option
+                                                    v-for="category in categories"
+                                                    :key="category.id"
+                                                    :value="category.id">
+                                                    {{ category.name }}
+                                                </option>
+                                            </FormSelect>
                                         </div>
                                         <ValidationError>
                                             {{ form.errors.roles }}
+                                        </ValidationError>
+                                    </div>
+
+                                    <div class="sm:col-span-3">
+                                        <label for="pages" class="block text-sm font-medium text-gray-700">
+                                            Pages
+                                        </label>
+                                        <div class="mt-1">
+                                            <FormInput
+                                                type="text"
+                                                v-model="form.pages"
+                                                name="pages"
+                                                id="pages"
+                                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                        </div>
+                                        <ValidationError>
+                                            {{ form.errors.pages }}
+                                        </ValidationError>
+                                    </div>
+
+                                    <div class="sm:col-span-3">
+                                        <label for="pages" class="block text-sm font-medium text-gray-700">
+                                            Sub Category
+                                        </label>
+                                        <div class="mt-1">
+                                            <FormInput
+                                                type="text"
+                                                v-model="form.sub_category"
+                                                name="sub_category"
+                                                id="sub_category"
+                                                class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm" />
+                                        </div>
+                                        <ValidationError>
+                                            {{ form.errors.sub_category }}
+                                        </ValidationError>
+                                    </div>
+
+                                    <div class="sm:col-span-6">
+                                        <label for="description" class="block text-sm font-medium text-gray-700">
+                                            Description
+                                        </label>
+                                        <div class="mt-1">
+                                            <FormTextArea
+                                                v-model="form.description"
+                                                id="description"
+                                                name="description" />
+                                        </div>
+                                        <ValidationError>
+                                            {{ form.errors.description }}
                                         </ValidationError>
                                     </div>
                                 </div>
@@ -75,7 +138,7 @@
 
                         <div class="pt-5">
                             <div class="flex justify-end">
-                                <CancelButton :href="route('admin.users.index')" /> <SubmitButton />
+                                <CancelButton :href="route('admin.books.index')" /> <SubmitButton />
                             </div>
                         </div>
                     </form>
@@ -95,36 +158,40 @@ import FormInput from "@/components/FormInput.vue";
 import SubmitButton from "@/components/SubmitButton.vue";
 import CancelButton from "@/components/CancelButton.vue";
 import ValidationError from "@/components/ValidationError.vue";
-import Multiselect from "@vueform/multiselect";
+import FormSelect from "@/components/FormSelect.vue";
+import FormTextArea from "@/components/FormTextArea.vue";
 
 const props = defineProps({
-    roles: Array,
-    user: Object,
-    role_user: Array,
+    categories: Array,
+    book: Object,
 });
 
-const editMode = props.user ? true : false;
+const editMode = props.book ? true : false;
 
 const form = useForm({
-    name: editMode ? props.user?.name : "",
-    email: editMode ? props.user?.email : "",
-    roles: !editMode ? [] : props.role_user?.map(({ role_id }) => role_id),
+    name: editMode ? props.book?.name : "",
+    publisher: editMode ? props.book?.publisher : "",
+    isbn: editMode ? props.book?.isbn : "",
+    sub_category: editMode ? props.book?.sub_category : "",
+    category_id: editMode ? props.book?.category_id : "",
+    pages: editMode ? props.book?.pages : "",
+    description: editMode ? props.book?.description : "",
 });
 
 const submit = () => {
-    if (!editMode) form.post(route("admin.users.store"));
-    else form.put(route("admin.users.update", props.user.id));
+    if (!editMode) form.post(route("admin.books.store"));
+    else form.put(route("admin.books.update", props.book.id));
 };
 
 const breadCrumbPages = [
     {
-        name: "Users",
-        href: route("admin.users.index"),
+        name: "Books",
+        href: route("admin.books.index"),
         current: true,
     },
     {
-        name: !editMode ? "Create User" : "Update User",
-        href: !editMode ? route("admin.users.create") : route("admin.users.edit", props.user.id),
+        name: !editMode ? "Create Book" : "Update Book",
+        href: !editMode ? route("admin.books.create") : route("admin.books.edit", props.book.id),
         current: true,
     },
 ];

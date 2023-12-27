@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('pages');
             $table->string('sub_category', 100)->nullable();
 
-            $table->foreignId('category', 100)->constrained('categories')->cascadeOnDelete();
+            $table->foreignId('category_id', 100)->constrained()->cascadeOnDelete();
             $table->foreignId('added_by')->constrained('users')->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();
