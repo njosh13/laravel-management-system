@@ -4,7 +4,10 @@
     </div>
     <div class="flex min-h-screen bg-gray-100">
         <!-- Static sidebar for desktop -->
-        <SideBar :sidebarOpen="sidebarOpen" @closeSidebar="closeSideBar" :roles="roles" :user="user" />
+        <SideBar v-if="isAdmin" :sidebarOpen="sidebarOpen" @closeSidebar="closeSideBar" :roles="roles" :user="user" />
+
+        <UserSidebar v-else :sidebarOpen="sidebarOpen" @closeSidebar="closeSideBar" :roles="roles" :user="user" />
+
         <div class="flex flex-1 flex-col md:pl-64">
             <PageHeader @openSidebar="openSidebar" />
 
@@ -36,6 +39,7 @@
 <script setup>
 import { ref } from "vue";
 import SideBar from "@/components/SideBar.vue";
+import UserSidebar from "@/components/UserSidebar.vue";
 import PageHeader from "@/components/PageHeader.vue";
 import JetBanner from "@/Components/Banner.vue";
 import { usePage } from "@inertiajs/vue3";
@@ -54,4 +58,7 @@ const { props } = usePage();
 
 const user = props.auth.user;
 const roles = user.roles;
+
+// Check if any role name is 'Admin'
+const isAdmin = Object.values(roles).some((role) => role.name === "Admin");
 </script>
