@@ -85,7 +85,9 @@ class BookController extends Controller
             'Books/CreateAndEditForm',
             [
                 'book' => $book,
-                'categories' => $categories
+                'categories' => $categories,
+                'image' => $book->getMedia('image'),
+                'preview' => $book->getMedia('preview'),
             ]
         );
     }
@@ -101,10 +103,20 @@ class BookController extends Controller
             'description' => 'required|string',
             'pages' => 'required|integer',
             'category_id' => 'required|exists:categories,id',
+            'image' => 'file|required|mimes:jpg,png',
+            'preview' => 'file|required|mimes:pdf',
         ]);
 
         // Update the book
         $book->update($formData);
+
+        // Create Image File
+        $preview = $request->file('preview');
+        $book->addMedia($preview)->toMediaCollection('preview');
+
+        // Create Image File
+        $image = $request->file('image');
+        $book->addMedia($image)->toMediaCollection('image');
 
         return redirect()->route('admin.books.index');
     }

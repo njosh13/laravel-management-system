@@ -293,29 +293,28 @@ const navigation = [
         current: () => route().current("dashboard"),
     },
     {
+        name: "Books",
+        href: route("admin.books.index"),
+        icon: BookOpenIcon,
+        current: () => route().current("admin.books*"),
+    },
+    {
+        name: "Book Loans",
+        href: route("admin.book-loans.index"),
+        icon: BookOpenIcon,
+        current: () => route().current("admin.book-loans*"),
+    },
+    {
+        name: "Users",
+        href: route("admin.users.index"),
+        icon: OfficeBuildingIcon,
+        current: () => route().current("admin.users*"),
+    },
+    {
         name: "Profile",
         href: route("profile.show"),
         icon: UserIcon,
         current: () => route().current("profile*"),
-    },
-    {
-        name: "Admin",
-        icon: LockClosedIcon,
-        current: () => route().current("admin*"),
-        children: [
-            {
-                name: "Users",
-                href: route("admin.users.index"),
-                icon: OfficeBuildingIcon,
-                current: () => route().current("admin.users*"),
-            },
-            {
-                name: "Books",
-                href: route("admin.books.index"),
-                icon: BookOpenIcon,
-                current: () => route().current("admin.books*"),
-            },
-        ],
     },
 ];
 </script>

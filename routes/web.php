@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\BookLoan;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -41,6 +42,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
             Route::resource('books', BookController::class);
             // Books
             Route::resource('book-loans', BookLoanController::class);
+            Route::patch('book-loans/{bookLoan}/update_status{status}', [BookLoanController::class, 'updateBookLoanStatus'])->name('book-loans.update_status');
+
             // Users
             Route::resource('users', UserController::class);
         }

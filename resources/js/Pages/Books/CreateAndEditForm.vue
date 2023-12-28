@@ -141,7 +141,7 @@
                                             type="file"
                                             @input="form.image = $event.target.files[0]"
                                             class="block w-full border border-gray-300 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-white text-gray-100 dark:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 file:border-0 file:bg-gray-100 file:me-4 file:py-2 file:px-4" />
-
+                                        <p>Uploaded File: {{ image[0].name }}</p>
                                         <ValidationError>
                                             {{ form.errors.image }}
                                         </ValidationError>
@@ -156,6 +156,7 @@
                                             accept=".pdf"
                                             @input="form.preview = $event.target.files[0]"
                                             class="block w-full border border-gray-300 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-white text-gray-100 dark:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 file:border-0 file:bg-gray-100 file:me-4 file:py-2 file:px-4" />
+                                        <p>Uploaded File: {{ preview[0].name }}</p>
 
                                         <ValidationError>
                                             {{ form.errors.preview }}
@@ -193,7 +194,8 @@ import FormTextArea from "@/components/FormTextArea.vue";
 const props = defineProps({
     categories: Array,
     book: Object,
-    preview: Object,
+    preview: Array,
+    image: Array,
 });
 
 const editMode = props.book ? true : false;
@@ -206,8 +208,8 @@ const form = useForm({
     category_id: editMode ? props.book?.category_id : "",
     pages: editMode ? props.book?.pages : "",
     description: editMode ? props.book?.description : "",
-    preview: editMode ? props.book?.preview : "",
-    image: editMode ? props.book?.image : "",
+    preview: editMode ? props.preview : "",
+    image: editMode ? props.image : "",
 });
 
 const submit = () => {
