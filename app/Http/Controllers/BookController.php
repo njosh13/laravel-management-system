@@ -3,22 +3,25 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\User;
 use App\Models\Category;
 use Illuminate\Http\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Gate;
+use Symfony\Component\HttpFoundation\Response;
 
 class BookController extends Controller
 {
     public function index()
     {
         abort_if(Gate::denies('user_access'), Response::HTTP_FORBIDDEN, '403 Forbidden');
-        $books = Book::with('creator:id,name', 'category:id,name')->paginate(10);
+        $books = Book::with('creator:id,name', 'category:id,name')->filter(request(["search", "publisher", "category", "creator"]))->paginate(10);
 
-        return inertia(
-            'Books/Index',
-            ['books' => $books]
-        );
+        return inertia('Books/Index', [
+            'books' => $books,
+            'categories' => Category::select(['id', 'name'])->get(),
+            'publishers' => Book::pluck('publisher')->unique(),
+            'users' => User::select(['id', 'name'])->get()
+        ]);
     }
 
     public function create()
@@ -44,12 +47,23 @@ class BookController extends Controller
             'description' => 'required|string',
             'pages' => 'required|integer',
             'category_id' => 'required|exists:categories,id',
+            'image' => 'file|required|mimes:jpg,png',
+            'preview' => 'file|required|mimes:pdf',
         ]);
+
 
         $user_id = auth()->id();
         $formData['added_by'] = $user_id;
 
-        Book::create($formData);
+        $book = Book::create($formData);
+
+        // Create Image File
+        $preview = $request->file('preview');
+        $book->addMedia($preview)->toMediaCollection('preview');
+
+        // Create Image File
+        $image = $request->file('image');
+        $book->addMedia($image)->toMediaCollection('image');
 
         return redirect()->route('admin.books.index');
     }

@@ -24,6 +24,9 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, "index"])->name('dashboard');
 
+    // User Books
+    Route::get('all-books', [UserBookController::class, "allBooks"])->name('books.all');
+
 
     // Admin Pages 
     Route::group(

@@ -132,6 +132,35 @@
                                             {{ form.errors.description }}
                                         </ValidationError>
                                     </div>
+                                    <div class="sm:col-span-6">
+                                        <label for="image">Book Image</label>
+                                        <input
+                                            id="image"
+                                            name="image"
+                                            accept="image/*"
+                                            type="file"
+                                            @input="form.image = $event.target.files[0]"
+                                            class="block w-full border border-gray-300 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-white text-gray-100 dark:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 file:border-0 file:bg-gray-100 file:me-4 file:py-2 file:px-4" />
+
+                                        <ValidationError>
+                                            {{ form.errors.image }}
+                                        </ValidationError>
+                                    </div>
+                                    <div class="sm:col-span-6">
+                                        <label for="preview"> Book Preview </label>
+
+                                        <input
+                                            type="file"
+                                            id="preview"
+                                            name="preview"
+                                            accept=".pdf"
+                                            @input="form.preview = $event.target.files[0]"
+                                            class="block w-full border border-gray-300 shadow-sm rounded-lg text-sm focus:z-10 focus:border-blue-500 disabled:opacity-50 disabled:pointer-events-none bg-white text-gray-100 dark:text-gray-400 focus:outline-none focus:ring-1 focus:ring-gray-400 file:border-0 file:bg-gray-100 file:me-4 file:py-2 file:px-4" />
+
+                                        <ValidationError>
+                                            {{ form.errors.preview }}
+                                        </ValidationError>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -149,7 +178,7 @@
 </template>
 
 <script setup>
-import { useForm } from "@inertiajs/vue3";
+import { useForm, router } from "@inertiajs/vue3";
 import AppLayout from "@/Layouts/AppLayout.vue";
 import PageContent from "@/components/PageContent.vue";
 import AppBreadCumb from "@/components/AppBreadCumb.vue";
@@ -164,6 +193,7 @@ import FormTextArea from "@/components/FormTextArea.vue";
 const props = defineProps({
     categories: Array,
     book: Object,
+    preview: Object,
 });
 
 const editMode = props.book ? true : false;
@@ -176,11 +206,19 @@ const form = useForm({
     category_id: editMode ? props.book?.category_id : "",
     pages: editMode ? props.book?.pages : "",
     description: editMode ? props.book?.description : "",
+    preview: editMode ? props.book?.preview : "",
+    image: editMode ? props.book?.image : "",
 });
 
 const submit = () => {
-    if (!editMode) form.post(route("admin.books.store"));
-    else form.put(route("admin.books.update", props.book.id));
+    if (!editMode) {
+        form.post(route("admin.books.store"));
+        return;
+    }
+    router.post(route("admin.books.update", props.book.id), {
+        _method: "patch",
+        ...form.data(),
+    });
 };
 
 const breadCrumbPages = [

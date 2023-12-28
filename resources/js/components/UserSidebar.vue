@@ -293,6 +293,12 @@ const navigation = [
         current: () => route().current("dashboard"),
     },
     {
+        name: "Books",
+        href: route("books.all"),
+        icon: BookOpenIcon,
+        current: () => route().current("books*"),
+    },
+    {
         name: "Profile",
         href: route("profile.show"),
         icon: UserIcon,
