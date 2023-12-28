@@ -26,6 +26,11 @@ class Book extends Model implements HasMedia
         return $this->belongsTo(User::class, 'added_by');
     }
 
+    public function bookLoans()
+    {
+        return $this->hasMany(BookLoan::class, 'book_id');
+    }
+
     public function registerMediaCollections(): void
     {
         $this->addMediaCollection('preview');

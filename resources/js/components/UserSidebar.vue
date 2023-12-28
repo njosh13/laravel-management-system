@@ -299,6 +299,12 @@ const navigation = [
         current: () => route().current("books*"),
     },
     {
+        name: "My Books",
+        href: route("my-books.index"),
+        icon: BookOpenIcon,
+        current: () => route().current("my-books*"),
+    },
+    {
         name: "Profile",
         href: route("profile.show"),
         icon: UserIcon,

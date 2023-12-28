@@ -15,8 +15,8 @@ return new class extends Migration
             $table->id();
             $table->date('loan_date');
             $table->date('due_date');
-            $table->date('return_date');
-            $table->string('status', 20)->nullable();
+            $table->date('return_date')->nullable();
+            $table->string('status', 20);
 
             $table->boolean('extended', 3)->default(false);
             $table->date('extension_date')->nullable();
@@ -24,7 +24,6 @@ return new class extends Migration
             $table->string('penalty_status', 15)->nullable();
 
             $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
-            $table->foreignId('added_by')->constrained('users')->cascadeOnDelete();
             $table->foreignId('book_id')->constrained('books')->cascadeOnDelete();
             $table->timestamps();
             $table->softDeletes();

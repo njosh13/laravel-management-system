@@ -27,6 +27,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
     // User Books
     Route::get('all-books', [UserBookController::class, "allBooks"])->name('books.all');
 
+    // User Books
+    Route::resource('my-books', UserBookLoanController::class);
 
     // Admin Pages 
     Route::group(
@@ -37,6 +39,8 @@ Route::middleware(['auth:sanctum', config('jetstream.auth_session'), 'verified',
         static function () {
             // Books
             Route::resource('books', BookController::class);
+            // Books
+            Route::resource('book-loans', BookLoanController::class);
             // Users
             Route::resource('users', UserController::class);
         }
